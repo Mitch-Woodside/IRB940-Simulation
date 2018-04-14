@@ -479,7 +479,7 @@ elseif (input<handles.IRB940.axis1.range(1))||(input>handles.IRB940.axis1.range(
   return    
 else
   set(hObject,'Value',input);
-  handles.IRB940.axis1.q1=(input+757.2616);%Normalize to robot joint values
+  handles.IRB940.axis1.q1=(input);%Normalize to robot joint values
   guidata(hObject,handles);
 %   display(input);
 end
@@ -516,7 +516,7 @@ elseif (input<handles.IRB940.axis2.range(1))||(input>handles.IRB940.axis2.range(
   return    
 else
   set(hObject,'Value',input);
-  handles.IRB940.axis2.q2=(input+757.2616);%Normalize to robot joint values
+  handles.IRB940.axis2.q2=(input);%Normalize to robot joint values
   guidata(hObject,handles);
 %   display(input);
 end
@@ -553,7 +553,7 @@ elseif (input<handles.IRB940.axis3.range(1))||(input>handles.IRB940.axis3.range(
   return    
 else
   set(hObject,'Value',input);
-  handles.IRB940.axis3.q3=(input+757.2616);%Normalize to robot joint values
+  handles.IRB940.axis3.q3=(input);%Normalize to robot joint values
   guidata(hObject,handles);
 %   display(input);
 end
