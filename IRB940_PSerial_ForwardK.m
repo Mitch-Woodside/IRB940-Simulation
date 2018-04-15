@@ -121,6 +121,8 @@ function transformations=IRB940_PSerial_ForwardK(handles)
         axis6_correct=makehgtform('translate',[0, 0, -155])*makehgtform('scale',1000);
         %Tool
         tool_correct=makehgtform('zrotate',pi/2)*makehgtform('translate',[-0.65,-0.46,-267.76]);
+        %Frame
+        frame_correct=handles.IRB940.RD.frame;
         correct=makehgtform('yrotate',(pi/2))*scale;
         
         %Assign DH Transformations
@@ -139,7 +141,7 @@ function transformations=IRB940_PSerial_ForwardK(handles)
         transformations.axis1.rod.DH=Tr1b;
         transformations.axis2.rod.DH=Tr2b;
         transformations.axis3.rod.DH=Tr3b;
-        transformations.tool.DH=Ttoolb;       
+        transformations.tool.DH=Ttoolb; 
         
         %Corrected STL Transformations (Not Representative of Kinematics)
         transformations.base.stl=base_correct;
@@ -160,6 +162,7 @@ function transformations=IRB940_PSerial_ForwardK(handles)
         transformations.axis3.rod.stl=Tr3b*scale;
         transformations.tool.stl=Ttoolb*tool_correct;
         transformations.tool_triad.stl=Ttoolb*scale;
+        transformations.frame.stl=frame_correct;
 
     %Update Manipulator Outputs
     handles.Axis1_disp.String=num2str(q1);

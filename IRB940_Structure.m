@@ -10,6 +10,10 @@ function IRB940=IRB940_Structure()
     IRB940.RD.pside=174.75;
     IRB940.RD.dpc=289.2;
     IRB940.RD.dia=757.2616;
+    IRB940.RD.frame=makehgtform('translate',[1479.713, -126.240, 1330.488])* ...
+                    makehgtform('zrotate',90.2616*(pi/180))* ...
+                    makehgtform('xrotate',0.3873*(pi/180))* ...
+                    makehgtform('yrotate',-0.0139*(pi/180));
 
     %Load Base
     [IRB940.base.vertices, IRB940.base.faces, IRB940.base.normals]=stlRead("TR600_0.stl");
@@ -64,6 +68,9 @@ function IRB940=IRB940_Structure()
     
     %Load Tool
     [IRB940.tool.vertices, IRB940.tool.faces, IRB940.tool.normals]=stlRead("ISF_Tool_STL.stl");
+    
+    %Load Frame Assembly
+    [IRB940.frame.vertices, IRB940.frame.faces, IRB940.frame.normals]=stlRead("T-Slot ASsembly-45 brackets.stl");
     
     %Inverse Kinematics Data
     IRB940.InverseK.tool_coord=[1160.556,0,650,1]';

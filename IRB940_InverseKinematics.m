@@ -3,6 +3,7 @@ function handles=IRB940_InverseKinematics(handles)
     db=handles.IRB940.DH.db;
     d3=handles.IRB940.DH.d3;
     d6=handles.IRB940.DH.d6;
+    tool_off=handles.IRB940.DH.dTool;
     
     %Inverse Kinematic Inputs (Position, Tool Orientation, and Config)
     otool=handles.IRB940.InverseK.tool_coord(1:3);
@@ -13,7 +14,9 @@ function handles=IRB940_InverseKinematics(handles)
     Rtoolc=Rtool(1:3,1);
 
     %Inverse Calculation for Wrist Center----------------------------------
-        oc=otool-(d6*Rtoolc);
+        dtoolz=tool_off(3);
+        
+        oc=otool-((dtoolz+d6)*Rtoolc);
         ocb=oc-[0,0,db]';
 
         sq1=atan2(-ocb(3),ocb(1));

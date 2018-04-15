@@ -20,6 +20,7 @@ function IRB940_Plot(handles)
     axis3_act=patch('Vertices',handles.IRB940.axis3.act.vertices,'Faces',handles.IRB940.axis3.act.faces,'FaceColor',[1 0.5 0],'EdgeColor','none','FaceLighting','flat');
     axis3_rod=patch('Vertices',handles.IRB940.axis1.rod.vertices,'Faces',handles.IRB940.axis1.rod.faces,'FaceColor',[0.5 0.5 0.5],'EdgeColor','none','FaceLighting','flat');
     tool=patch('Vertices',handles.IRB940.tool.vertices,'Faces',handles.IRB940.tool.faces,'FaceColor',[.5 0.5 .5],'EdgeColor','none','FaceLighting','flat');
+    frame=patch('Vertices',handles.IRB940.frame.vertices,'Faces',handles.IRB940.frame.faces,'FaceColor',[.5 0.5 .5],'EdgeColor','none','FaceLighting','flat');
     
     %Tool Triad
     tool_triad(1)=plot3([.125,0],[0,0],[0,0],'LineWidth',3,'Color','r');
@@ -49,6 +50,7 @@ function IRB940_Plot(handles)
     axis3_frame_rod=hgtransform('Parent',handles.world_axes);
     tool_frame=hgtransform('Parent',handles.world_axes);
     tool_triad_frame=hgtransform('Parent',handles.world_axes);
+    forming_frame=hgtransform('Parent',handles.world_axes);
     
     %Attach model components to transform object
     set(base,'Parent',base_frame);
@@ -69,6 +71,7 @@ function IRB940_Plot(handles)
     set(axis3_rod,'Parent',axis3_frame_rod);
     set(tool_triad,'Parent',tool_triad_frame);
     set(tool,'Parent',tool_frame);
+    set(frame,'Parent',forming_frame);
     
     %Model Component Transfomrations
     Tforms=IRB940_PSerial_ForwardK(handles);
@@ -92,4 +95,6 @@ function IRB940_Plot(handles)
     set(axis3_frame_rod,'Matrix',Tforms.axis3.rod.stl);
     set(tool_frame,'Matrix',Tforms.tool.stl);
     set(tool_triad_frame,'Matrix',Tforms.tool_triad.stl);
+    set(forming_frame,'Matrix',Tforms.frame.stl);
+    
 end
