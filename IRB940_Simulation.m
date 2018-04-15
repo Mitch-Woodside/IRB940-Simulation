@@ -22,7 +22,7 @@ function varargout = IRB940_Simulation(varargin)
 
 % Edit the above text to modify the response to help IRB940_Simulation
 
-% Last Modified by GUIDE v2.5 14-Dec-2017 11:16:32
+% Last Modified by GUIDE v2.5 15-Apr-2018 00:14:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1656,3 +1656,44 @@ function Axis6_disp_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in open_file.
+function open_file_Callback(hObject, eventdata, handles)
+% hObject    handle to open_file (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.file_data=load_file();
+guidata(hObject,handles);
+
+% --- Executes on button press in close_file.
+function close_file_Callback(hObject, eventdata, handles)
+% hObject    handle to close_file (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+write_file(handles);
+
+
+% --- Executes on button press in prev.
+function prev_Callback(hObject, eventdata, handles)
+% hObject    handle to prev (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles=prev_position(handles);
+guidata(hObject,handles);
+
+% --- Executes on button press in next.
+function next_Callback(hObject, eventdata, handles)
+% hObject    handle to next (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles=next_position(handles);
+guidata(hObject,handles);
+
+% --- Executes on button press in delete.
+function delete_Callback(hObject, eventdata, handles)
+% hObject    handle to delete (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles=delete_position(handles);
+guidata(hObject,handles);
