@@ -71,7 +71,8 @@ function Module_Output(path,path_settings)
             fprintf(fileID,'    %-s\n',MoveL(path(i),speed,zone,tool,wobj)); 
         elseif path_type == 'jointtarget'
             %Writes MoveAbsJ command to file in the proper RAPID syntax.
-            fprintf(fileID,'    %-s\n',MoveAbsJ(path(i),speed,zone,tool));           
+            fprintf(fileID,'    %-s\n',MoveAbsJ(path(i),speed,zone,tool));
+            fprintf(fileID,'    WaitTime 5;\n');
         end
     end  
     fprintf(fileID,"  %1$-s\n%2$-s",Module(3),Module(4));

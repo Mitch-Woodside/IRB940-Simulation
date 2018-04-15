@@ -1,7 +1,7 @@
 function handles=prev_position(handles)
     index=handles.file_data.variables.index;
     index=index-1;
-    joint_positions=handles.file_data.variables.filtered_joint_positions;
+    joint_positions=handles.file_data.variables.spatial_filtered_positions;
     
     handles.IRB940.axis1.q1=joint_positions(index,1);
     handles.IRB940.axis2.q2=joint_positions(index,2);

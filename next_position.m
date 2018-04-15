@@ -1,6 +1,6 @@
 function handles=next_position(handles)
     index=handles.file_data.variables.index;
-    joint_positions=handles.file_data.variables.filtered_joint_positions;
+    joint_positions=handles.file_data.variables.spatial_filtered_positions;
 
     index=index+1; 
       
