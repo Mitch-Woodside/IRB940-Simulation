@@ -22,7 +22,7 @@ function varargout = IRB940_Simulation(varargin)
 
 % Edit the above text to modify the response to help IRB940_Simulation
 
-% Last Modified by GUIDE v2.5 15-Apr-2018 00:14:57
+% Last Modified by GUIDE v2.5 15-Apr-2018 01:18:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1697,3 +1697,11 @@ function delete_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles=delete_position(handles);
 guidata(hObject,handles);
+
+
+% --- Executes on button press in write_mod.
+function write_mod_Callback(hObject, eventdata, handles)
+% hObject    handle to write_mod (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+write_mod(handles);
