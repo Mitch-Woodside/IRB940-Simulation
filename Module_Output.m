@@ -22,7 +22,6 @@ function Module_Output(path,path_settings)
     pathname = uigetdir();
     filename = 'form_path.mod';
     
-    %[filename,pathname] = uiputfile('*.mod','Create Output Module');
     if isequal(pathname,0)
         disp('Failed to create file')
     else
