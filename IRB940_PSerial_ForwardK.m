@@ -179,24 +179,24 @@ function transformations=IRB940_PSerial_ForwardK(handles)
     handles.Toolz_disp.String=num2str(Otool(3));
 
 
-    %Plot on Figure
-    axes(handles.kstructure_axes);
-    cla
-    %base
-    plot3([Oc1(1),Oc2(1),Oc3(1),Oc1(1)],[Oc1(2),Oc2(2),Oc3(2),Oc1(2)],[Oc1(3),Oc2(3),Oc3(3),Oc1(3)]);
-    hold on;
-    %platform
-    plot3([Os1(1),Os2(1),Os3(1),Os1(1)],[Os1(2),Os2(2),Os3(2),Os1(2)],[Os1(3),Os2(3),Os3(3),Os1(3)]);
-    %Serial Axis 3
-    plot3([0,Ocb(1)],[0,Ocb(2)],[0,Ocb(3)]);
-    %Axis1
-    plot3([Os1(1),Oc1(1)],[Os1(2),Oc1(2)],[Os1(3),Oc1(3)]);
-    %Axis2
-    plot3([Os2(1),Oc2(1)],[Os2(2),Oc2(2)],[Os2(3),Oc2(3)]);
-    %Axis3
-    plot3([Os3(1),Oc3(1)],[Os3(2),Oc3(2)],[Os3(3),Oc3(3)]);
-    %Axis4
-    plot3([Otool(1),Ocb(1)],[Otool(2),Ocb(2)],[Otool(3),Ocb(3)]);
-    daspect([1 1 1]);
-    hold off;
+%     %Plot on Figure
+%     axes(handles.kstructure_axes);
+%     cla
+%     %base
+%     plot3([Oc1(1),Oc2(1),Oc3(1),Oc1(1)],[Oc1(2),Oc2(2),Oc3(2),Oc1(2)],[Oc1(3),Oc2(3),Oc3(3),Oc1(3)]);
+%     hold on;
+%     %platform
+%     plot3([Os1(1),Os2(1),Os3(1),Os1(1)],[Os1(2),Os2(2),Os3(2),Os1(2)],[Os1(3),Os2(3),Os3(3),Os1(3)]);
+%     %Serial Axis 3
+%     plot3([0,Ocb(1)],[0,Ocb(2)],[0,Ocb(3)]);
+%     %Axis1
+%     plot3([Os1(1),Oc1(1)],[Os1(2),Oc1(2)],[Os1(3),Oc1(3)]);
+%     %Axis2
+%     plot3([Os2(1),Oc2(1)],[Os2(2),Oc2(2)],[Os2(3),Oc2(3)]);
+%     %Axis3
+%     plot3([Os3(1),Oc3(1)],[Os3(2),Oc3(2)],[Os3(3),Oc3(3)]);
+%     %Axis4
+%     plot3([Otool(1),Ocb(1)],[Otool(2),Ocb(2)],[Otool(3),Ocb(3)]);
+%     daspect([1 1 1]);
+%     hold off;
 end

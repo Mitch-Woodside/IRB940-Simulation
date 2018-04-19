@@ -12,7 +12,10 @@ function handles=next_position(handles)
     handles.IRB940.axis6.q6=joint_positions(index,6);
 
     
-    handles=IRB940_ForwardKinematics(handles);
+    handles=IRB940_Parallel2Serial(handles);
+    IRB940_RePlot(handles);
+    handles=record_frames(handles);
     
+    handles.jog_position.String=num2str(index);
     handles.file_data.variables.index=index;
 end

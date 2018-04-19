@@ -13,7 +13,7 @@ function varargout = IRB940_Simulation(varargin)
 %      existing singleton*.  Starting from the left, property value pairs are
 %      applied to the GUI before IRB940_Simulation_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to IRB940_Simulation_OpeningFcn via varargin.
+%      stop_auto_play.  All inputs are passed to IRB940_Simulation_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
@@ -22,7 +22,7 @@ function varargout = IRB940_Simulation(varargin)
 
 % Edit the above text to modify the response to help IRB940_Simulation
 
-% Last Modified by GUIDE v2.5 15-Apr-2018 01:43:26
+% Last Modified by GUIDE v2.5 19-Apr-2018 01:46:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -480,6 +480,7 @@ elseif (input<handles.IRB940.axis1.range(1))||(input>handles.IRB940.axis1.range(
 else
   set(hObject,'Value',input);
   handles.IRB940.axis1.q1=(input);%Normalize to robot joint values
+  handles=IRB940_Parallel2Serial(handles);
   guidata(hObject,handles);
 %   display(input);
 end
@@ -517,6 +518,7 @@ elseif (input<handles.IRB940.axis2.range(1))||(input>handles.IRB940.axis2.range(
 else
   set(hObject,'Value',input);
   handles.IRB940.axis2.q2=(input);%Normalize to robot joint values
+  handles=IRB940_Parallel2Serial(handles);
   guidata(hObject,handles);
 %   display(input);
 end
@@ -554,6 +556,7 @@ elseif (input<handles.IRB940.axis3.range(1))||(input>handles.IRB940.axis3.range(
 else
   set(hObject,'Value',input);
   handles.IRB940.axis3.q3=(input);%Normalize to robot joint values
+  handles=IRB940_Parallel2Serial(handles);
   guidata(hObject,handles);
 %   display(input);
 end
@@ -1012,7 +1015,8 @@ function forwardK_output_Callback(hObject, eventdata, handles)
 % hObject    handle to forwardK_output (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles=IRB940_ForwardKinematics(handles);
+% handles=IRB940_ForwardKinematics(handles);
+IRB940_RePlot(handles);
 guidata(hObject,handles);
 
 % --- Executes on button press in pushbutton18.
@@ -1029,7 +1033,8 @@ function A1_jog_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 jog=handles.IRB940.axis1.q1+handles.A1_inc.Value;
 handles.IRB940.axis1.q1=jog;
-handles=IRB940_ForwardKinematics(handles);
+handles=IRB940_Parallel2Serial(handles);
+IRB940_RePlot(handles);
 guidata(hObject,handles);
 
 % --- Executes on button press in pushbutton20.
@@ -1088,7 +1093,7 @@ function nA1_jog_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 jog=handles.IRB940.axis1.q1-handles.A1_inc.Value;
 handles.IRB940.axis1.q1=jog;
-handles=IRB940_ForwardKinematics(handles);
+handles=IRB940_Parallel2Serial(handles); IRB940_RePlot(handles);
 guidata(hObject,handles);
 
 % --- Executes on button press in pushbutton23.
@@ -1377,7 +1382,7 @@ function A2_jog_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 jog=handles.IRB940.axis2.q2+handles.A2_inc.Value;
 handles.IRB940.axis2.q2=jog;
-handles=IRB940_ForwardKinematics(handles);
+handles=IRB940_Parallel2Serial(handles); IRB940_RePlot(handles);
 guidata(hObject,handles);
 
 
@@ -1422,7 +1427,7 @@ function nA2_jog_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 jog=handles.IRB940.axis2.q2-handles.A2_inc.Value;
 handles.IRB940.axis2.q2=jog;
-handles=IRB940_ForwardKinematics(handles);
+handles=IRB940_Parallel2Serial(handles); IRB940_RePlot(handles);
 guidata(hObject,handles);
 
 % --- Executes on button press in A3_jog.
@@ -1432,7 +1437,7 @@ function A3_jog_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 jog=handles.IRB940.axis3.q3+handles.A3_inc.Value;
 handles.IRB940.axis3.q3=jog;
-handles=IRB940_ForwardKinematics(handles);
+handles=IRB940_Parallel2Serial(handles); IRB940_RePlot(handles);
 guidata(hObject,handles);
 
 
@@ -1477,7 +1482,7 @@ function nA3_jog_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 jog=handles.IRB940.axis3.q3-handles.A3_inc.Value;
 handles.IRB940.axis3.q3=jog;
-handles=IRB940_ForwardKinematics(handles);
+handles=IRB940_Parallel2Serial(handles); IRB940_RePlot(handles);
 guidata(hObject,handles);
 
 % --- Executes on button press in A4_jog.
@@ -1705,3 +1710,318 @@ function write_mod_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 write_mod(handles);
+
+
+function SerialAxis1_value_Callback(hObject, eventdata, handles)
+% hObject    handle to SerialAxis1_value (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SerialAxis1_value as text
+%        str2double(get(hObject,'String')) returns contents of SerialAxis1_value as a double
+input = str2double(get(hObject,'String'));
+if isnan(input)
+  errordlg('You must enter a numeric value','Invalid Input','modal')
+  uicontrol(hObject)
+  return   
+else
+  set(hObject,'Value',input);
+  handles.IRB940.serial_axis1.sq1=input;
+  guidata(hObject,handles);
+%   display(input);
+end
+
+% --- Executes during object creation, after setting all properties.
+function SerialAxis1_value_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SerialAxis1_value (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function SerialAxis2_value_Callback(hObject, eventdata, handles)
+% hObject    handle to SerialAxis2_value (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SerialAxis2_value as text
+%        str2double(get(hObject,'String')) returns contents of SerialAxis2_value as a double
+input = str2double(get(hObject,'String'));
+if isnan(input)
+  errordlg('You must enter a numeric value','Invalid Input','modal')
+  uicontrol(hObject)
+  return   
+else
+  set(hObject,'Value',input);
+  handles.IRB940.serial_axis2.sq2=input;
+  guidata(hObject,handles);
+%   display(input);
+end
+
+% --- Executes during object creation, after setting all properties.
+function SerialAxis2_value_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SerialAxis2_value (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function SerialAxis3_value_Callback(hObject, eventdata, handles)
+% hObject    handle to SerialAxis3_value (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SerialAxis3_value as text
+%        str2double(get(hObject,'String')) returns contents of SerialAxis3_value as a double
+input = str2double(get(hObject,'String'));
+if isnan(input)
+  errordlg('You must enter a numeric value','Invalid Input','modal')
+  uicontrol(hObject)
+  return   
+else
+  set(hObject,'Value',input);
+  handles.IRB940.serial_axis3.sq3=input;
+  guidata(hObject,handles);
+%   display(input);
+end
+
+% --- Executes during object creation, after setting all properties.
+function SerialAxis3_value_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SerialAxis3_value (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in SA1_jog.
+function SA1_jog_Callback(hObject, eventdata, handles)
+% hObject    handle to SA1_jog (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+jog=handles.IRB940.serial_axis1.sq1+handles.SA1_inc.Value;
+handles.IRB940.serial_axis1.sq1=jog;
+IRB940_RePlot(handles);
+guidata(hObject,handles);
+
+
+function SA1_inc_Callback(hObject, eventdata, handles)
+% hObject    handle to SA1_inc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SA1_inc as text
+%        str2double(get(hObject,'String')) returns contents of SA1_inc as a double
+input = str2double(get(hObject,'String'));
+if isnan(input)
+  errordlg('You must enter a numeric value','Invalid Input','modal')
+  uicontrol(hObject)
+  return  
+else
+  set(hObject,'Value',input);
+  guidata(hObject,handles);
+%   display(input);
+end
+
+% --- Executes during object creation, after setting all properties.
+function SA1_inc_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SA1_inc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+input = str2double(get(hObject,'String'));
+set(hObject,'Value',input);
+guidata(hObject,handles);
+%   display(input);
+
+
+% --- Executes on button press in nSA1_jog.
+function nSA1_jog_Callback(hObject, eventdata, handles)
+% hObject    handle to nSA1_jog (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+jog=handles.IRB940.serial_axis1.sq1-handles.SA1_inc.Value;
+handles.IRB940.serial_axis1.sq1=jog;
+IRB940_RePlot(handles);
+guidata(hObject,handles);
+
+% --- Executes on button press in SA2_jog.
+function SA2_jog_Callback(hObject, eventdata, handles)
+% hObject    handle to SA2_jog (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+jog=handles.IRB940.serial_axis2.sq2+handles.SA2_inc.Value;
+handles.IRB940.serial_axis2.sq2=jog;
+IRB940_RePlot(handles);
+guidata(hObject,handles);
+
+
+function SA2_inc_Callback(hObject, eventdata, handles)
+% hObject    handle to SA2_inc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SA2_inc as text
+%        str2double(get(hObject,'String')) returns contents of SA2_inc as a double
+input = str2double(get(hObject,'String'));
+if isnan(input)
+  errordlg('You must enter a numeric value','Invalid Input','modal')
+  uicontrol(hObject)
+  return  
+else
+  set(hObject,'Value',input);
+  guidata(hObject,handles);
+%   display(input);
+end
+
+% --- Executes during object creation, after setting all properties.
+function SA2_inc_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SA2_inc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+input = str2double(get(hObject,'String'));
+set(hObject,'Value',input);
+guidata(hObject,handles);
+%   display(input);
+
+
+% --- Executes on button press in nSA2_jog.
+function nSA2_jog_Callback(hObject, eventdata, handles)
+% hObject    handle to nSA2_jog (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+jog=handles.IRB940.serial_axis2.sq2-handles.SA2_inc.Value;
+handles.IRB940.serial_axis2.sq2=jog;
+IRB940_RePlot(handles);
+guidata(hObject,handles);
+
+% --- Executes on button press in SA3_jog.
+function SA3_jog_Callback(hObject, eventdata, handles)
+% hObject    handle to SA3_jog (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+jog=handles.IRB940.serial_axis3.sq3+handles.SA3_inc.Value;
+handles.IRB940.serial_axis3.sq3=jog;
+IRB940_RePlot(handles);
+guidata(hObject,handles);
+
+
+function SA3_inc_Callback(hObject, eventdata, handles)
+% hObject    handle to SA3_inc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SA3_inc as text
+%        str2double(get(hObject,'String')) returns contents of SA3_inc as a double
+input = str2double(get(hObject,'String'));
+if isnan(input)
+  errordlg('You must enter a numeric value','Invalid Input','modal')
+  uicontrol(hObject)
+  return  
+else
+  set(hObject,'Value',input);
+  guidata(hObject,handles);
+%   display(input);
+end
+
+% --- Executes during object creation, after setting all properties.
+function SA3_inc_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SA3_inc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+input = str2double(get(hObject,'String'));
+set(hObject,'Value',input);
+guidata(hObject,handles);
+%   display(input);
+
+
+% --- Executes on button press in nSA3_jog.
+function nSA3_jog_Callback(hObject, eventdata, handles)
+% hObject    handle to nSA3_jog (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+jog=handles.IRB940.serial_axis3.sq3-handles.SA3_inc.Value;
+handles.IRB940.serial_axis3.sq3=jog;
+IRB940_RePlot(handles);
+guidata(hObject,handles);
+
+
+% --- Executes on button press in auto_play_position.
+function auto_play_position_Callback(hObject, eventdata, handles)
+% hObject    handle to auto_play_position (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles=auto_play(handles);
+guidata(hObject,handles);
+
+% --- Executes on button press in record.
+function record_Callback(hObject, eventdata, handles)
+% hObject    handle to record (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of record
+
+% --- Executes on button press in save_movie.
+function save_movie_Callback(hObject, eventdata, handles)
+% hObject    handle to save_movie (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% figure(1)
+% movie(handles.file_data.movie.frame,1,1);
+save_movie(handles);
+
+
+function jog_position_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_position (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of jog_position as text
+%        str2double(get(hObject,'String')) returns contents of jog_position as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function jog_position_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to jog_position (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

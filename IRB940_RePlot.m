@@ -1,11 +1,13 @@
 function IRB940_RePlot(handles)
+    %% Set World Axis
     axes(handles.world_axes);
-    hg=findobj(gca,'Type','hgtransform');
     
-    %Model Component Transfomrations
+    %% Model Component Transfomrations
     Tforms=IRB940_PSerial_ForwardK(handles);
 
-    %Assign Transforms to Objects
+    %% Assign Transforms to Objects
+    hg=findobj(gca,'Type','hgtransform');
+    
     set(hg(19),'Matrix',Tforms.base.stl);
     set(hg(18),'Matrix',Tforms.serial_axis1.stl);
     set(hg(17),'Matrix',Tforms.serial_axis2.stl);
