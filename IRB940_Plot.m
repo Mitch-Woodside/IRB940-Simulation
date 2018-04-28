@@ -97,4 +97,5 @@ function IRB940_Plot(handles)
     set(tool_triad_frame,'Matrix',Tforms.tool_triad.stl);
     set(forming_frame,'Matrix',Tforms.frame.stl);
     
+    hold off
 end

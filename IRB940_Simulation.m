@@ -56,6 +56,8 @@ function IRB940_Simulation_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.IRB940=IRB940_Structure();
 %Output to Axes
 IRB940_Plot(handles);
+% IRB940_Plot2(handles);
+
    
 % Choose default command line output for IRB940_Simulation
 handles.output = hObject;
@@ -2012,7 +2014,18 @@ function jog_position_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of jog_position as text
 %        str2double(get(hObject,'String')) returns contents of jog_position as a double
-
+index=str2double(get(hObject,'String'));
+disp(index);
+handles.file_data.variables.index=index;
+joint_positions=handles.file_data.variables.spatial_filtered_positions; 
+handles.IRB940.serial_axis1.sq1=joint_positions(index,1);
+handles.IRB940.serial_axis2.sq2=joint_positions(index,2);
+handles.IRB940.serial_axis3.sq3=joint_positions(index,3);
+handles.IRB940.axis4.q4=joint_positions(index,4);
+handles.IRB940.axis5.q5=joint_positions(index,5);
+handles.IRB940.axis6.q6=joint_positions(index,6);
+guidata(hObject,handles);
+IRB940_RePlot(handles);
 
 % --- Executes during object creation, after setting all properties.
 function jog_position_CreateFcn(hObject, eventdata, handles)

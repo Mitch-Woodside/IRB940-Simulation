@@ -1,5 +1,11 @@
 function write_mod(handles)
-    simulation_filtered_positions=handles.file_data.variables.spatial_filtered_positions;
+    
+    sq=handles.file_data.variables.spatial_filtered_positions(:,1:3);
+    
+    q=IRB940_Serial2Parallel(sq(:,1),sq(:,2),sq(:,3));
+    
+    simulation_filtered_positions(:,1:3)=q(:,1:3);
+    simulation_filtered_positions(:,4:6)=handles.file_data.variables.spatial_filtered_positions(:,4:6);
 
     %% OUTPUT FILTERED JOINT POSITIONS TO .MOD FILE
     path_settings.speed=100;
